@@ -28,11 +28,13 @@ def handler(event, context):
         FilterExpression=queryString
         )
     
-    output=""
+    count=1
+    output=[]
     for j in response['Items']:
-        output=output+j['url']
+        output.append({'url{}'.format(count): j['url']})
+        count=count+1
 
     return {
         'statusCode': 200,
-        'body': json.dumps(output)
+        'body': json.JSONEncoder(indent=0).encode(output)
     }
