@@ -2,6 +2,7 @@ import logging
 import boto3
 import fnmatch
 from botocore.exceptions import ClientError
+import requests
 
 
 def post_image(image_path):
@@ -20,17 +21,20 @@ def post_image(image_path):
 
     filtered = fnmatch.filter(image_name, '*.jpg')
     bucket=input("Please enter the bucket you want to upload to \n (Note: Only Bucket Available is fit5225-a2-team) \n")
-    s3.upload_file(image_path, bucket, filtered[0], ExtraArgs={'ACL': 'public-read'})
+    s3.upload_file(image_path, bucket, filtered[0], ExtraArgs={'ACL': 'public-read', 'ContentType': 'image/jpeg'})
 
 
 def create_query_string(values):
     s = ''
+    URL="https://8wl1a323h1.execute-api.us-east-1.amazonaws.com/prod/api/search?" 
     for i in range(len(values)):
         if not s:
             s += "tag{}={}".format(i+1, values[i])
         else:
             s += "&tag{}={}".format(i+1, values[i])
-    return s
+    URL+=s
+    r = requests.get(url=URL)
+    print(r.json())
 
 
 def main():
@@ -48,6 +52,9 @@ def main():
         values = inPut.split(' ')
         while "" in values:
             values.remove("")
+
+        create_query_string(values)
+
     else:
         print('Please provide valid input.')
 
