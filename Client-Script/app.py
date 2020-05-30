@@ -1,48 +1,57 @@
 import logging
-
 import boto3
 import fnmatch
-
 from botocore.exceptions import ClientError
 
+
 s3 = boto3.client('s3')
-response = s3.list_buckets()
 
 
 def post_image(image_path):
-    image_name = image_path.split("/")
-    print(image_name)
+
+
+    if image_path.find("\\"):
+        image_name = image_path.split('\\')
+        print(image_name)
+
+    elif image_path.find("/"):
+        image_name = image_path.split("/")
+        print(image_name)
+    
+    else:
+        print("incorrect path provided")
+
     filtered = fnmatch.filter(image_name, '*.jpg')
-    print(filtered)
-    print(type(filtered))
-    s3.upload_file(image_path, 'henri-bucket', filtered[0], ExtraArgs={'ACL': 'public-read'})
+    bucket=input("Please enter the bucket you want to upload to \n (Note: Only Bucket Available is fit5225-a2-team) \n")
+    s3.upload_file(image_path, bucket, filtered[0], ExtraArgs={'ACL': 'public-read'})
 
 
 def create_query_string(values):
     s = ''
     for i in range(len(values)):
         if not s:
-            s += 'tag{}={}'.format(i+1, values[i])
+            s += "tag{}={}".format(i+1, values[i])
         else:
-            s += '&tag{}={}'.format(i+1, values[i])
+            s += "&tag{}={}".format(i+1, values[i])
     return s
 
 
+def main():
+    response = input("Menu \n [1] Upload Image \n [2] Search Images \n")
 
-response = input('Menu \n [1] Upload Image \n [2] Search Images \n')
-if response == '1':
-    image_path = input('Please provide an absolute path to your image: ')
-    try:
-        post_image(image_path)
-    except ClientError as e:
-        logging.error(e)
-elif response == '2':
-    input = input('Please input the objects that you would like to search for (separated by spaces for multiple tags): \n')
-    values = input.split(' ')
-    while "" in values:
-        values.remove("")
-    print(values)
-else:
-    print('Please provide valid input.')
+    if response == '1':
+        image_path = input('Please provide an absolute path to your image: ')
+        try:
+            post_image(image_path)
+        except ClientError as e:
+            logging.error(e)
+    elif response == '2':
+        inPut = input('Please input the objects that you would like to search for (separated by spaces for multiple tags): \n')
+        values = inPut.split(' ')
+        while "" in values:
+            values.remove("")
+    else:
+        print('Please provide valid input.')
 
-
+if __name__ == "__main__":
+    main()    
