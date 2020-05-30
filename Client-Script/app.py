@@ -35,8 +35,6 @@ def create_query_string(values):
 
 def main():
 
-    s3 = boto3.client('s3')
-
     response = input("Menu \n [1] Upload Image \n [2] Search Images \n")
 
     if response == '1':
@@ -54,4 +52,5 @@ def main():
         print('Please provide valid input.')
 
 if __name__ == "__main__":
+    s3 = boto3.client('s3')
     main()    
