@@ -6,13 +6,15 @@
     </head>
     <body>
         <h1>Search for image with tag(S)</h1>
-        <form action="" method="GET">
+        <form action="/searchTag" method="POST">
             <label for="tags">Tags (Seperate tags with ","):</label><br>
             <input type="text" id="tags" name="tags">
             <br><br>
             <input type="submit" value="Submit">
         </form>
         <br>
-        <a href="index.html">Back to home</a>
+        </form action="/getHomeTemp" method="GET">
+	   <input type="submit" value="Home">
+	</form>
     </body>
 </html>

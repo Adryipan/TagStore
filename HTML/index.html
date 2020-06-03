@@ -7,13 +7,11 @@
     <body>
         <h1>Welcome to Tag Store</h1>
         <h2>Please click on the link to select the next operation</h2>
-        <ul>
-            <li>
-                <a href="searchImage.html">Search image with tag(s)</a>
-            </li>
-            <li>
-                <a href="uploadImage.html">Upload image</a>
-            </li>
-        </ul>
+	<form action="/getSearchTemp" method="GET">
+		<input type="submit" value="Search Tag">
+	</form>
+	<form action="/getUploadTemp" method="GET">
+		<input type="submit" value="Upload Image">
+	</form>
     </body>
 </html>
