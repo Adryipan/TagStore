@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>FIT5225 A2 Tag Store</title>
+    </head>
+    <body>
+        <h1>Upload your image to the server</h1>
+        <form action="{{ url_for('uploadImage')}}" method="POST" enctype="multipart/form-data">
+            <label for="image">Select image:</label>
+            <input type="file" id="image" name="image" accept=".jpg,.jpeg">
+            <br><br>
+            <input name="upload_button" type="submit" value="Submit">
+        </form>
+        <br>
+	<form action="/getHomeTemp" method="GET">
+	   <input type="submit" value="Home">
+	</form>
+    </body>
+</html>
