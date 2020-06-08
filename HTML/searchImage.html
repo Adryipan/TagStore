@@ -1,20 +1,22 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>FIT5225 A2 Tag Store</title>
-    </head>
-    <body>
-        <h1>Search for image with tag(S)</h1>
-        <form action="/searchTag" method="POST">
-            <label for="tags">Tags (Seperate tags with ","):</label><br>
-            <input type="text" id="tags" name="tags">
-            <br><br>
-            <input type="submit" value="Submit">
-        </form>
-        <br>
-        </form action="/getHomeTemp" method="GET">
-	   <input type="submit" value="Home">
-	</form>
-    </body>
-</html>
+{% extends "master.html" %}
+
+{% block title %}Search Tags{% endblock %}
+
+{% block body %}
+    <h1>Search for image with tag(s)</h1>
+    <form action="/searchTag" method="POST">
+        <h3>Tags (seperate tags with ","):</h3>
+
+        <div class="input-group input-group-lg w-25 mx-auto">
+            <div class="input-group-prepend">
+                <input class="form-control" type="text" id="tags" name="tags">
+            </div>
+            <button type="submit" class="btn btn-outline-secondary">
+                <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                </svg>
+            </button>
+        </div>
+    </form>
+{% endblock %}

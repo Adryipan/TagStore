@@ -1,20 +1,32 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>FIT5225 A2 Tag Store</title>
-    </head>
-    <body>
-        <h1>Upload your image to the server</h1>
-        <form action="/uploadImage" method="POST">
-            <label for="image">Select image:</label>
-            <input type="file" id="image" name="image" accept=".jpg,.jpeg">
-            <br><br>
-            <input type="submit" value="Submit">
+{% extends "master.html" %}
+
+{% block title %}Upload Image{% endblock %}
+
+{% block body %}
+    <h3>Upload your image to the server</h3>
+    
+        <form action="{{ url_for('uploadImage')}}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="image">Select image:</label>
+                <div class="input-group w-25 mx-auto">
+                    <input type="file" class="form-control-file" id="image" name="image" accept=".jpg,.jpeg">
+                    <br>
+                    <div style="margin: 0 auto; padding:10px">
+                        <button type="submit">Upload</button>
+                    </div>
+                </div>                        
+            </div>
         </form>
-        <br>
-	<form action="/getHomeTemp" method="GET">
-	   <input type="submit" value="Home">
-	</form>
-    </body>
-</html>
+        
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            Click <a href="/getHomeTemp">here</a> to go back to the home page.
+        {% endif %}
+    {% endwith %}
+{% endblock %}
