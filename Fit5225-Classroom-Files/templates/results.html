@@ -1,0 +1,16 @@
+{% extends "master.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block body %}
+    {% if results %}
+        <h3>URLs</h3>
+        {% for url in results %}
+            <img src="{{url}}"width="480" height="360">
+            <div><a href={{url}} target="_blank" >{{url}}</a></div>
+        {% endfor %}
+    {% else %}
+        <h1>Sorry, no images with those tags were found!</h1>
+    {% endif %}
+    Click <a href="/getHomeTemp">here</a> to go back to the home page. 
+{% endblock %}

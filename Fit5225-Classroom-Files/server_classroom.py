@@ -1,4 +1,4 @@
-from flask import Flask,request, render_template, redirect,flash
+from flask import Flask,request, render_template, redirect,flash, url_for
 import os
 import requests
 import json
@@ -17,6 +17,14 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".",1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route("/signOut", methods=["GET"])
+def signOut():
+    global id_token
+    global access_token
+    id_token=''
+    access_token=''
+    return render_template("signOut.html")
+
 @app.route("/uploadImage", methods=["GET","POST"])
 def uploadImage():
     if request.method == "POST":
@@ -25,13 +33,13 @@ def uploadImage():
         else:
             # If the post request has the file
             if "image" not in request.files:
-                flash("No file part")
-                return redirect(request.url)
+                flash("No file part", "danger")
+                return redirect(url_for('getUploadTemplate'))
             file = request.files["image"]
             # if the user does not select a file
             if file.filename == "":
-                flash("No selected file")
-                return redirect(request.url)
+                flash("No selected file", "danger")
+                return redirect(url_for('getUploadTemplate'))
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
@@ -47,12 +55,14 @@ def uploadImage():
                 asak=resp2['Credentials']['SecretKey']
                 ast=resp2['Credentials']['SessionToken']
 
-
                 cogsess=boto3.Session(aws_access_key_id=acki,aws_secret_access_key=asak,aws_session_token=ast,region_name='us-east-1')
                 clt=cogsess.client('s3',region_name='us-east-1')
                 clt.upload_file(UPLOAD_FOLDER + "/" + filename,'fit5225-tagstore-upload-bucket',filename,ExtraArgs={'ACL': 'public-read', 'ContentType': 'image/jpeg'})
                 os.remove(os.path.join(UPLOAD_FOLDER, filename))
-    return render_template("index.html")
+                flash("{} image upload successful".format(filename), "success")
+            else:
+                flash("Incorrect filetype", "danger")
+    return redirect(url_for('getUploadTemplate'))
 
 
 @app.route("/searchTag", methods=["POST"])
@@ -75,11 +85,16 @@ def searchTag():
         resp=requests.get(url=objURL,headers=header,params=parm)
         objSTRING=[]
         count1=1
+        # getting {'message': 'Internal server error'} for empty queries
+        if 'message' in resp.json():
+            return render_template('results.html')
+
         for i in resp.json():
             objSTRING.append(i['url{}'.format(count1)])
             count1+=1
-        JSON={'url':str(objSTRING)}
-        return JSON
+        #JSON={'url':str(objSTRING)}
+
+        return render_template('results.html', results = objSTRING)
     
 @app.route("/getHomeTemp", methods=["GET"])
 def getHomeTemp():
