@@ -21,11 +21,16 @@ def allowed_file(filename):
 def signOut():
     global id_token
     global access_token
-    id_token=''
-    access_token=''
-    return render_template("signOut.html")
+    if not id_token:
+        if not access_token:
+            return "Invalid Request"
+        return "Invalid Request"
+    else:
+        id_token=''
+        access_token=''
+        return render_template("signOut.html")
 
-@app.route("/uploadImage", methods=["GET","POST"])
+@app.route("/uploadImage", methods=["POST"])
 def uploadImage():
     if request.method == "POST":
         if not id_token:
@@ -64,8 +69,7 @@ def uploadImage():
                 flash("{} image upload successful".format(filename), "success")
             else:
                 flash("Incorrect filetype", "danger")
-    return redirect(url_for('getUploadTemplate'))
-
+        return redirect(url_for('getUploadTemplate'))
 
 @app.route("/searchTag", methods=["POST"])
 def searchTag():
